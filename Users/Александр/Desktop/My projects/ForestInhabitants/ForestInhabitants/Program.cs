@@ -15,7 +15,7 @@ namespace ForestInhabitants
     {
         static void Main(string[] args)
         {
-            var forest = new ForestLoader(new StreamReader("RandomMap.txt")).Load();
+            var forest = new ForestLoader(new StreamReader("MyMap.txt")).Load();
             new ConsoleVisualisator(forest, new UserCommandGenerator());
             //var testForest = new ForestLoader(new StreamReader("TestMap.txt")).Load();
             //var testInhabitant = new Inhabitant("Alex", 10, new Coordinates(1, 1));

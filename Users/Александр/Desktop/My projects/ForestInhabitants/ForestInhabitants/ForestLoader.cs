@@ -32,7 +32,7 @@ namespace ForestInhabitants
                 for (var j = 0; j < map[i].Length; j++)
                 {
                     if (!convertionDictionary.ContainsKey(map[i][j]))
-                        map[i] = map[i].Replace(map[i][j], convertionDictionary.Keys.ElementAt(0));
+                        throw new KeyNotFoundException();
                     forest.Map[i].Add(convertionDictionary[map[i][j]].CoordinateObject(new Coordinates(j, i)));
                 }
             }

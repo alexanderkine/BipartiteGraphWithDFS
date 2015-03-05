@@ -38,7 +38,7 @@ namespace ForestInhabitants
 
         private bool OutOfBorders(Coordinates position)
         {
-            return position.X >= Map[0].Count || position.X < 0 || position.Y >= Map.Count || position.Y < 0;
+            return position.X < 0 || position.Y >= Map.Count || position.Y < 0 || position.X >= Map[position.Y].Count;
         }
 
         private void OnForestChange()

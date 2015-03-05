@@ -34,10 +34,15 @@ namespace ForestInhabitants
             for (var i = 0; i < forest.Map.Count; i++)
             {
                 for (var j = 0; j < forest.Map[i].Count; j++)
-                    Console.Write(forest.Map[i][j].ToChar());
+                    Console.Write(VisualisateForestObject(forest.Map[i][j]));
                 Console.WriteLine();
             }
             DrawLegend();
+        }
+
+        public object VisualisateForestObject(ForestObject forestObject)
+        {
+            return forestObject.ToChar();
         }
 
         private void DrawLegend()

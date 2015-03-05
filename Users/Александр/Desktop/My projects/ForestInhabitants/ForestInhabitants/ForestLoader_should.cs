@@ -18,9 +18,9 @@ namespace ForestInhabitants
         }
 
         [TestCase]
-        public void does_not_throw_exception_with_not_correct_symbols()
+        public void throw_exception_with_not_correct_symbols()
         {
-            Assert.DoesNotThrow(() => new ForestLoader(new StreamReader("FakeSymbols.txt")).Load());
+            Assert.Throws<KeyNotFoundException>(() => new ForestLoader(new StreamReader("FakeSymbols.txt")).Load());
         }
 
         [TestCase]
