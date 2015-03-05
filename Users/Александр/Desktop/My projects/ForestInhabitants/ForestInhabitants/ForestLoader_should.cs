@@ -1,0 +1,32 @@
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using ForestInhabitants.ForestObjects;
+using NUnit.Framework;
+
+namespace ForestInhabitants
+{
+    public class ForestLoader_should
+    {
+        [TestCase]
+        public void work_with_null_stream_reader()
+        {
+            Assert.Throws<NullReferenceException>(() => new ForestLoader(null).Load());
+        }
+
+        [TestCase]
+        public void does_not_throw_exception_with_not_correct_symbols()
+        {
+            Assert.DoesNotThrow(() => new ForestLoader(new StreamReader("FakeSymbols.txt")).Load());
+        }
+
+        [TestCase]
+        public void not_work_with_not_exists_files()
+        {
+            Assert.Throws<FileNotFoundException>(() => new ForestLoader(new StreamReader(Path.GetRandomFileName())).Load());
+        }
+    }
+}
