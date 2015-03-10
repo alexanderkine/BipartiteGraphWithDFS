@@ -26,10 +26,5 @@ namespace ForestInhabitants.ForestObjects
         {
             return new Footpath(coordinates);
         }
-
-        public override char ToChar()
-        {
-            return ' ';
-        }
     }
 }

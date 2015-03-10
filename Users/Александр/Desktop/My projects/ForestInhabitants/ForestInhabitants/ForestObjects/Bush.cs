@@ -23,10 +23,5 @@ namespace ForestInhabitants.ForestObjects
         {
             return new Bush(coordinates);
         }
-
-        public override char ToChar()
-        {
-            return char.ConvertFromUtf32(9632)[0];
-        }
     }   
 }

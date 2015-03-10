@@ -27,10 +27,5 @@ namespace ForestInhabitants.ForestObjects
         {
             return new Trap(coordinates);
         }
-
-        public override char ToChar()
-        {
-            return '\u2663';
-        }
     }   
 }

@@ -39,15 +39,15 @@ namespace ForestInhabitants.Generators
             while (true)
             {
                 var randomObject = canEnterObjects[rnd.Next(canEnterObjects.Count)];
-                var newInhabitant = new Inhabitant(RandomStringGenerator(rnd.Next(1,20)), rnd.Next(1, 20));              
-                forest.CreateInhabitant(newInhabitant, randomObject.Place);
+                var newInhabitant = new Inhabitant(RandomStringGenerator(rnd.Next(1,20)), rnd.Next(1, 20));
+                forest.CreateInhabitant(ref newInhabitant, randomObject.Place, new Coordinates(0, 1));
                 canEnterObjects.Remove(randomObject);
                 while (!Console.NumberLock)
                 {
                     while (forest.Inhabitants.Count != 0)
                     {
                         var randomInhabitant = forest.Inhabitants.ElementAt(rnd.Next(forest.Inhabitants.Count));
-                        forest.Move(randomInhabitant, GenerateCommand());
+                        forest.Move(ref randomInhabitant, GenerateCommand());
                         canEnterObjects.Remove(randomInhabitant.PrevObject);
                         break;
                     }

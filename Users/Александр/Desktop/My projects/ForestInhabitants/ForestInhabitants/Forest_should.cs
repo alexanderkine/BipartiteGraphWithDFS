@@ -16,7 +16,7 @@ namespace ForestInhabitants
         {
             var testForest = new ForestLoader(new StreamReader("TestMap.txt")).Load();
             var testInhabitant = new Inhabitant("Alex", 10);
-            testForest.CreateInhabitant(testInhabitant, new Coordinates(0, 0));
+            testForest.CreateInhabitant(ref testInhabitant, new Coordinates(0, 0), new Coordinates(0, 1));
             Assert.True(testForest.Map[0][0] is Bush);
         }
         
@@ -25,8 +25,8 @@ namespace ForestInhabitants
         {
             var testForest = new ForestLoader(new StreamReader("TestMap.txt")).Load();
             var testInhabitant = new Inhabitant("Alex", 10);
-            testForest.CreateInhabitant(testInhabitant, new Coordinates(2, 1));
-            testForest.Move(testInhabitant, MoveCommand.Up);
+            testForest.CreateInhabitant(ref testInhabitant, new Coordinates(2, 1), new Coordinates(0, 1));
+            testForest.Move(ref testInhabitant, MoveCommand.Up);
             Assert.True(testForest.Map[1][2] is Inhabitant && testForest.Map[2][0] is Bush);
         }
 
@@ -36,9 +36,9 @@ namespace ForestInhabitants
             var testForest = new ForestLoader(new StreamReader("TestMap.txt")).Load();
             var testInhabitant = new Inhabitant("Alex", 10);
             var lifeAfterTrapCell = testInhabitant.Life - 1;
-            testForest.CreateInhabitant(testInhabitant, new Coordinates(7, 2));
-            testForest.Move(testInhabitant, MoveCommand.Up);
-            testForest.Move(testInhabitant, MoveCommand.Down);
+            testForest.CreateInhabitant(ref testInhabitant, new Coordinates(7, 2), new Coordinates(0, 1));
+            testForest.Move(ref testInhabitant, MoveCommand.Up);
+            testForest.Move(ref testInhabitant, MoveCommand.Down);
             Assert.True(testForest.Map[1][7] is Trap && testForest.Map[2][7] is Inhabitant && (testForest.Map[2][7] as Inhabitant).Life == lifeAfterTrapCell);
         }
 
@@ -48,9 +48,9 @@ namespace ForestInhabitants
             var testForest = new ForestLoader(new StreamReader("TestMap.txt")).Load();
             var testInhabitant = new Inhabitant("Alex", 10);
             var lifeAfterLifeCell = testInhabitant.Life + 1;
-            testForest.CreateInhabitant(testInhabitant, new Coordinates(7, 5));
-            testForest.Move(testInhabitant, MoveCommand.Down);
-            testForest.Move(testInhabitant, MoveCommand.Up);
+            testForest.CreateInhabitant(ref testInhabitant, new Coordinates(7, 5), new Coordinates(0, 1));
+            testForest.Move(ref testInhabitant, MoveCommand.Down);
+            testForest.Move(ref testInhabitant, MoveCommand.Up);
             Assert.True(testForest.Map[6][7] is Footpath && testForest.Map[5][7] is Inhabitant && (testForest.Map[5][7] as Inhabitant).Life == lifeAfterLifeCell);
         }
 
@@ -59,9 +59,9 @@ namespace ForestInhabitants
         {
             var testForest = new ForestLoader(new StreamReader("TestMap.txt")).Load();
             var testInhabitant = new Inhabitant("Alex", 10);
-            testForest.CreateInhabitant(testInhabitant, new Coordinates(1, 1));
-            testForest.Move(testInhabitant, MoveCommand.Up);
-            Assert.True(!testForest.Move(testInhabitant, MoveCommand.Up) && testForest.Map[0][1] is Inhabitant);
+            testForest.CreateInhabitant(ref testInhabitant, new Coordinates(1, 1), new Coordinates(0, 1));
+            testForest.Move(ref testInhabitant, MoveCommand.Up);
+            Assert.True(!testForest.Move(ref testInhabitant, MoveCommand.Up) && testForest.Map[0][1] is Inhabitant);
         }
     }
 }

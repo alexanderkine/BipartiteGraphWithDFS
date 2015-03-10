@@ -27,10 +27,5 @@ namespace ForestInhabitants.ForestObjects
         {
             return new Life(coordinates);
         }
-
-        public override char ToChar()
-        {
-            return '\u2665';
-        }
     }
 }

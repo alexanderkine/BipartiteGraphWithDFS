@@ -10,7 +10,8 @@ namespace ForestInhabitants.ForestObjects
     {
         public Coordinates Place;
         public abstract bool CanMove { get; }
-        public ForestObject(Coordinates place)
+
+        protected ForestObject(Coordinates place)
         {
             Place = place;
         }
@@ -20,7 +21,5 @@ namespace ForestInhabitants.ForestObjects
         public abstract bool CanEnter(ref Inhabitant inhabitant, ref List<List<ForestObject>> map, Coordinates place);
 
         public abstract ForestObject CoordinateObject(Coordinates coordinates);
-
-        public abstract char ToChar();
     }
 }

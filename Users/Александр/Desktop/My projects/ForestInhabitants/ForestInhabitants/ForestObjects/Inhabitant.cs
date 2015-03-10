@@ -12,7 +12,7 @@ namespace ForestInhabitants.ForestObjects
         public string Name;
         public int Life;
         public ForestObject PrevObject;
-
+        public Coordinates Purpose;
         public Inhabitant(string name, int life)
         {
             Name = name;
@@ -35,11 +35,6 @@ namespace ForestInhabitants.ForestObjects
         public override ForestObject CoordinateObject(Coordinates coordinates)
         {
             return new Inhabitant(Name,Life) {Place = coordinates};
-        }
-
-        public override char ToChar()
-        { 
-            return Name[0];
         }
     }
 }

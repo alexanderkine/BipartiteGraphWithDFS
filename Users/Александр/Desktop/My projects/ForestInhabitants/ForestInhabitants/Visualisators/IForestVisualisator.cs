@@ -10,6 +10,5 @@ namespace ForestInhabitants
     public interface IForestVisualisator
     {
         void DrawForest(Forest forest);
-        object VisualisateForestObject(ForestObject forestObject);
     }
 }
