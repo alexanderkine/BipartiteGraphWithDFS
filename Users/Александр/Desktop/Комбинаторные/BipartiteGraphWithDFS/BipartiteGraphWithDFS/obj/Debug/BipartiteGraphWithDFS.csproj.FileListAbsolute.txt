@@ -1,0 +1,6 @@
+C:\Users\Александр\Desktop\Комбинаторные\BipartiteGraphWithDFS\BipartiteGraphWithDFS\bin\Debug\BipartiteGraphWithDFS.exe.config
+C:\Users\Александр\Desktop\Комбинаторные\BipartiteGraphWithDFS\BipartiteGraphWithDFS\obj\Debug\BipartiteGraphWithDFS.csprojResolveAssemblyReference.cache
+C:\Users\Александр\Desktop\Комбинаторные\BipartiteGraphWithDFS\BipartiteGraphWithDFS\bin\Debug\BipartiteGraphWithDFS.exe
+C:\Users\Александр\Desktop\Комбинаторные\BipartiteGraphWithDFS\BipartiteGraphWithDFS\bin\Debug\BipartiteGraphWithDFS.pdb
+C:\Users\Александр\Desktop\Комбинаторные\BipartiteGraphWithDFS\BipartiteGraphWithDFS\obj\Debug\BipartiteGraphWithDFS.exe
+C:\Users\Александр\Desktop\Комбинаторные\BipartiteGraphWithDFS\BipartiteGraphWithDFS\obj\Debug\BipartiteGraphWithDFS.pdb
