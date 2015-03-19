@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace ForestInhabitants.ForestObjects
 {
@@ -16,6 +12,10 @@ namespace ForestInhabitants.ForestObjects
             Place = place;
         }
 
+        protected ForestObject(params int[] coordinates)
+        {
+            Place = new Coordinates(coordinates[0],coordinates[1]);
+        }
         protected ForestObject(){}
 
         public abstract bool CanEnter(ref Inhabitant inhabitant, ref List<List<ForestObject>> map, Coordinates place);

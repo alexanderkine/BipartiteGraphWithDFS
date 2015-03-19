@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Remoting.Lifetime;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace ForestInhabitants.ForestObjects
 {
@@ -13,6 +8,7 @@ namespace ForestInhabitants.ForestObjects
         public int Life;
         public ForestObject PrevObject;
         public Coordinates Purpose;
+        public bool EnterIntoLife;
         public Inhabitant(string name, int life)
         {
             Name = name;
@@ -35,6 +31,23 @@ namespace ForestInhabitants.ForestObjects
         public override ForestObject CoordinateObject(Coordinates coordinates)
         {
             return new Inhabitant(Name,Life) {Place = coordinates};
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            return obj is Inhabitant && ((Inhabitant) obj).Name == Name;
+        }
+
+        public override int GetHashCode()
+        {
+            return 1;
+        }
+
+        public Inhabitant GetClone()
+        {
+            return (Inhabitant) MemberwiseClone();
         }
     }
 }

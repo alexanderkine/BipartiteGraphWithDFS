@@ -60,6 +60,7 @@
     <Compile Include="ForestObjects\Life.cs" />
     <Compile Include="ForestObjects\Trap.cs" />
     <Compile Include="Generators\GameBot.cs" />
+    <Compile Include="Generators\ReferenceComparer.cs" />
     <Compile Include="Visualisators\ConsoleVisualisator.cs" />
     <Compile Include="Forest_should.cs" />
     <Compile Include="Generators\IForestCommandGenerator.cs" />

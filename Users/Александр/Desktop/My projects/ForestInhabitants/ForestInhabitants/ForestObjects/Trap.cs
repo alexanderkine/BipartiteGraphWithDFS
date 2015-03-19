@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace ForestInhabitants.ForestObjects
 {
@@ -11,11 +7,13 @@ namespace ForestInhabitants.ForestObjects
         public Trap()
         { }
         public Trap(Coordinates place) : base(place) { }
-
+        public Trap(params int[] coordinates) : base(coordinates) { }
         public override bool CanMove { get { return true; } }
 
         public override bool CanEnter(ref Inhabitant inhabitant, ref List<List<ForestObject>> map, Coordinates place)
-        {         
+        {
+            //if (inhabitant.Life == 1)
+            //    return false;
             inhabitant.PrevObject = new Trap(place);
             map[place.Y][place.X] = inhabitant;
             inhabitant.Place = place;
@@ -26,6 +24,18 @@ namespace ForestInhabitants.ForestObjects
         public override ForestObject CoordinateObject(Coordinates coordinates)
         {
             return new Trap(coordinates);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            return obj is Trap;
+        }
+
+        public override int GetHashCode()
+        {
+            return 1;
         }
     }   
 }

@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Remoting.Messaging;
-using System.Text;
-using System.Threading.Tasks;
-using NUnit.Framework.Constraints;
-
-namespace ForestInhabitants
+﻿namespace ForestInhabitants
 {
     public class Coordinates
     {
@@ -22,6 +14,18 @@ namespace ForestInhabitants
         public Coordinates Add(Coordinates otherCoordinates)
         {
             return new Coordinates(X + otherCoordinates.X, Y + otherCoordinates.Y);
+        }
+        public Coordinates Substract(Coordinates otherCoordinates)
+        {
+            return new Coordinates(X - otherCoordinates.X, Y - otherCoordinates.Y);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (!(obj is Coordinates))
+                return false;
+            var otherCoordinates = obj as Coordinates;
+            return (otherCoordinates.X == X) && (otherCoordinates.Y == Y);
         }
     }
 }

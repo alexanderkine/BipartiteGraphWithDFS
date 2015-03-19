@@ -1,11 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
 using ForestInhabitants.ForestObjects;
 
 namespace ForestInhabitants
@@ -15,33 +10,51 @@ namespace ForestInhabitants
     {
         public List<List<ForestObject>> Map = new List<List<ForestObject>>();
         public HashSet<Inhabitant> Inhabitants = new HashSet<Inhabitant>();
+        public HashSet<Inhabitant> DestroyedInhabitants = new HashSet<Inhabitant>();
         public event Action<Forest> ForestChange;                  //   Событие изменения леса
         public event Func<Inhabitant,bool> InhabitantCreated;      //        События
         public event Func<Inhabitant, bool> InhabitantDestroyed;   //         лесных
-        public event Func<Inhabitant, bool> InhabitantMove;        //        жителей
+        public event Action InhabitantMove;        //        жителей
 
         public bool CreateInhabitant(ref Inhabitant inhabitant,Coordinates place,Coordinates purpose)
         {
-            if (OutOfBorders(place) || OutOfBorders(purpose))
+            if (OutOfBorders(place) || OutOfBorders(purpose) || purpose.Equals(place))
                 return false;
+            if (inhabitant.EnterIntoLife)
+                inhabitant.EnterIntoLife = false;
             var successChange = Map[place.Y][place.X].CanEnter(ref inhabitant, ref Map, place);           
-            if (Map[purpose.Y][purpose.X].CanMove)
+            if (successChange && Map[purpose.Y][purpose.X].CanMove)
                  inhabitant.Purpose = purpose;
             return successChange && OnInhabitantCreated(inhabitant) && Inhabitants.Add(inhabitant) && DestroyInhabitantsWithZeroLife();
-        }           
-          
+        }
+         
         public bool Move(ref Inhabitant inhabitant, Coordinates command)
         {            
             var newPosition = command.Add(inhabitant.Place);
             if (OutOfBorders(newPosition)) 
                 return false;
             var prevObject = inhabitant.PrevObject;
+            if (inhabitant.EnterIntoLife)
+                inhabitant.EnterIntoLife = false;
             var successChange = Map[newPosition.Y][newPosition.X].CanEnter(ref inhabitant, ref Map, newPosition) && inhabitant.Leave(ref Map, prevObject);
-            return successChange && OnInhabitantMove(inhabitant) && DestroyInhabitantsWithZeroLife();
+            if (successChange && inhabitant.Life > 0)
+                OnInhabitantMove();
+            return successChange && DestroyInhabitantsWithZeroLife();
         }
+
+        public bool DestroyInhabitant(ref Inhabitant inhabitant)
+        {
+            Inhabitants.Remove(inhabitant);
+            DestroyedInhabitants.Add(inhabitant);
+            Map[inhabitant.Place.Y][inhabitant.Place.X] = inhabitant.PrevObject;
+            OnInhabitantDestroyed(inhabitant);
+            return true;
+        }  
 
         private bool OutOfBorders(Coordinates position)
         {
+            if (position == null)
+                return true;
             return position.X < 0 || position.Y >= Map.Count || position.Y < 0 || position.X >= Map[position.Y].Count;
         }
 
@@ -63,22 +76,19 @@ namespace ForestInhabitants
                 InhabitantDestroyed(inhabitant);
         }
 
-        protected virtual bool OnInhabitantMove(Inhabitant inhabitant)
+        private void OnInhabitantMove()
         {
             if (InhabitantMove != null)
-                InhabitantMove(inhabitant);
+                InhabitantMove();
             OnForestChange();
-            return true;
         }
 
         private bool DestroyInhabitantsWithZeroLife()
-        {
+        {           
             while (Inhabitants.Any(inhabitant => inhabitant.Life <= 0))
             {
-                var destroyedInhabitant = Inhabitants.First(inhabitant => inhabitant.Life <= 0);
-                Inhabitants.Remove(destroyedInhabitant);
-                OnInhabitantDestroyed(destroyedInhabitant);
-                Map[destroyedInhabitant.Place.Y][destroyedInhabitant.Place.X] = destroyedInhabitant.PrevObject;
+                var destroyedInhabitant = Inhabitants.First(inhabitant => inhabitant.Life <= 0);                
+                DestroyInhabitant(ref destroyedInhabitant);
                 OnForestChange();
             }
             return true;
