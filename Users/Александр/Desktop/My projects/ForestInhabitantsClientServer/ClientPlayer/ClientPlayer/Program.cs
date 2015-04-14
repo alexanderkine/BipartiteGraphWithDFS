@@ -11,7 +11,6 @@ namespace ClientPlayer
     {
         static void Main(string[] args)
         {           
-            var buffer = new byte[4096];
             var endPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 11000);
             var socket = new Socket(endPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
             try
@@ -25,13 +24,15 @@ namespace ClientPlayer
             if (socket.Connected)
             {
                 Inhabitant inhabitant;
-                BeforeStart(socket, buffer, out inhabitant);
+                BeforeStart(socket, out inhabitant);
                 AfterStart(socket,inhabitant);
             }
         }
 
-        private static void BeforeStart(Socket socket, byte[] buffer, out Inhabitant inhabitant)
+        private static void BeforeStart(Socket socket, out Inhabitant inhabitant)
         {
+            var buffer = new byte[4096];
+            socket.Send(Encoding.UTF8.GetBytes("I am player"));
             var rnd = new Random();
             socket.Receive(buffer);
             var inhabitants = Encoding.UTF8.GetString(buffer).Split(new[] { ' ', '\0' }, StringSplitOptions.RemoveEmptyEntries);

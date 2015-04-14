@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mime;
 using System.Net.Sockets;
 using System.Text;
 using ClientPlayer.ForestObjects;
@@ -99,7 +101,8 @@ namespace ClientPlayer
             var buffer = new byte[256];
             var ser = JsonConvert.SerializeObject(command,Formatting.Indented);
             socket.Send(Encoding.UTF8.GetBytes(ser));
-            socket.Receive(buffer);
+            if (socket.Receive(buffer) == 0)
+                Environment.Exit(1);
             var serInhabitant = Encoding.UTF8.GetString(buffer).Replace("\0", "");
             var oldCoordinates = inhabitant.Place;
             inhabitant = JsonConvert.DeserializeObject<Inhabitant>(serInhabitant, new ForestObjectConverter());

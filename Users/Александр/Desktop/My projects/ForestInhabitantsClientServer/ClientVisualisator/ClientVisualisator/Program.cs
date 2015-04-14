@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -13,7 +14,6 @@ namespace ClientVisualisator
     {
         static void Main(string[] args)
         {
-            Forest forest;           
             var endPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 11000);
             var socket = new Socket(endPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);         
             try
@@ -26,21 +26,27 @@ namespace ClientVisualisator
             }
             if (socket.Connected)
             {
-                //socket.Send(Encoding.UTF8.GetBytes("I am visualisator"));
+                socket.Send(Encoding.UTF8.GetBytes("I am visualisator"));
                 while (socket.Connected)
                 {
-                    var buffer = new byte[socket.ReceiveBufferSize];
-                    socket.Receive(buffer);
-                    var visualisator = new ConsoleVisualisator();
-                    //using (var fs = new FileStream("forest.xml", FileMode.Create))
-                    //{
-                    //    fs.Write(buffer,0,buffer.Length);
-                    //}
-                    File.WriteAllText("forest.xml", Encoding.UTF8.GetString(buffer));
-                    forest = XmlLoader.DeserializeForest("forest.xml");
-                    foreach (var inhabitant in forest.Inhabitants.Where(inh => inh != null))
-                        visualisator.AddInhabitantToDictionary(inhabitant);
-                    visualisator.DrawForest(forest);
+                    try
+                    {
+                        var buffer = new byte[socket.ReceiveBufferSize];
+                        socket.Receive(buffer);
+                        var visualisator = new ConsoleVisualisator();
+                        using (var fs = new FileStream("forest.xml", FileMode.Create))
+                        {
+                            fs.Write(buffer, 0, buffer.Length);
+                        }
+                        var forest = XmlLoader.DeserializeForest("forest.xml");
+                        foreach (var inhabitant in forest.Inhabitants.Where(inh => inh != null))
+                            visualisator.AddInhabitantToDictionary(inhabitant);
+                        visualisator.DrawForest(forest);
+                    }
+                    catch (Exception)
+                    {
+                        return;
+                    }
                 }
             }
         }

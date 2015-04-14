@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Serialization;
 using ForestServer.ForestObjects;
 
 namespace ForestServer
@@ -13,7 +8,7 @@ namespace ForestServer
     public class Forest
     {
         public ForestObject[][] Map;
-        public Inhabitant[] Inhabitants = new Inhabitant[64];
+        public Inhabitant[] Inhabitants = new Inhabitant[0];
         public event Action<Forest> ForestChange;                  //   Событие изменения леса
         public event Func<Inhabitant, bool> InhabitantCreated;      //        События
         public event Func<Inhabitant, bool> InhabitantDestroyed;   //         лесных
@@ -43,7 +38,7 @@ namespace ForestServer
 
         public bool DestroyInhabitant(ref Inhabitant inhabitant)
         {
-            Inhabitants.SetValue(null,Array.IndexOf(Inhabitants,inhabitant));
+            Inhabitants = Inhabitants.Where(x => x.Life > 0).ToArray();
             Map[inhabitant.Place.Y][inhabitant.Place.X] = inhabitant.PrevObject;
             OnInhabitantDestroyed(inhabitant);
             return true;
@@ -66,7 +61,7 @@ namespace ForestServer
             if (InhabitantCreated != null)
                 InhabitantCreated(inhabitant);
             OnForestChange();
-            Inhabitants[Array.IndexOf(Inhabitants, null)] = inhabitant;
+            Inhabitants = Inhabitants.Concat(new[] {inhabitant}).ToArray();
             return true;
         }
         private void OnInhabitantDestroyed(Inhabitant inhabitant)
@@ -86,7 +81,7 @@ namespace ForestServer
         {
             while (Inhabitants.Any(inhabitant => inhabitant != null && inhabitant.Life <= 0))
             {
-                var destroyedInhabitant = Inhabitants.First(inhabitant => inhabitant != null && inhabitant.Life <= 0);
+                var destroyedInhabitant = Inhabitants.First(inhabitant => inhabitant.Life <= 0);
                 DestroyInhabitant(ref destroyedInhabitant);
                 OnForestChange();
             }

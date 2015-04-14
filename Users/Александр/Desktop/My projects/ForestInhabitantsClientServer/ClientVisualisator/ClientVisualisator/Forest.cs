@@ -11,7 +11,6 @@ namespace ClientVisualisator
     [Serializable]
     public class Forest
     {
-        //[JsonConverter(typeof(ForestObjectConverter))]
         public ForestObject[][] Map;
         public Inhabitant[] Inhabitants = new Inhabitant[64];
         public event Action<Forest> ForestChange;                  //   Событие изменения леса
