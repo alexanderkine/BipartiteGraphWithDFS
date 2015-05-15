@@ -9,6 +9,8 @@ namespace ClientPlayer.ForestObjects
         [JsonConverter(typeof(ForestObjectConverter))]
         public ForestObject PrevObject;
         public Coordinates Purpose;
+
+        public Inhabitant() { }
         public Inhabitant(string name, int life)
         {
             Name = name;

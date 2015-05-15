@@ -21,7 +21,6 @@ namespace Запускатор
                 playerProcess.Start();
                 Thread.Sleep(1000);
             }
-
         }
     }
 }

@@ -14,7 +14,7 @@
         {
             Place = new Coordinates(coordinates[0], coordinates[1]);
         }
-        protected ForestObject() { }
+        public ForestObject() { }
 
         public abstract bool CanEnter(ref Inhabitant inhabitant, ref ForestObject[][] map, Coordinates place);
 

@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Mime;
 using System.Net.Sockets;
 using System.Text;
+using System.Xml.Serialization;
 using ClientPlayer.ForestObjects;
 using Newtonsoft.Json;
 
@@ -13,8 +15,6 @@ namespace ClientPlayer
     {
         private Inhabitant inhabitant;
         private readonly Socket socket;
-        private readonly int mapHeight;
-        private readonly int mapWidth;
         private int[][] mapWithWarFog;
         private bool wayFound;
 
@@ -30,11 +30,6 @@ namespace ClientPlayer
         {
             this.inhabitant = inhabitant;
             this.socket = socket;
-            var buffer = new byte[512];
-            socket.Receive(buffer);
-            var size = Encoding.UTF8.GetString(buffer).Replace("\0", "").Split(' ');
-            mapHeight = int.Parse(size[0]);
-            mapWidth = int.Parse(size[1]);
             CreateWarFog();
         }
 
@@ -73,7 +68,7 @@ namespace ClientPlayer
             foreach (var command in commands)
             {
                 var nextPlace = inhabitant.Place.Add(command);
-                if (OutOfBorders(nextPlace)) continue;
+                //if (OutOfBorders(nextPlace)) continue;
                 if (mapWithWarFog[nextPlace.Y][nextPlace.X] == 0 && !wayFound)
                 {
                     if (!Move(command))
@@ -98,22 +93,33 @@ namespace ClientPlayer
 
         private bool Move(Coordinates command)
         {
-            var buffer = new byte[256];
-            var ser = JsonConvert.SerializeObject(command,Formatting.Indented);
-            socket.Send(Encoding.UTF8.GetBytes(ser));
-            if (socket.Receive(buffer) == 0)
-                Environment.Exit(1);
-            var serInhabitant = Encoding.UTF8.GetString(buffer).Replace("\0", "");
-            var oldCoordinates = inhabitant.Place;
-            inhabitant = JsonConvert.DeserializeObject<Inhabitant>(serInhabitant, new ForestObjectConverter());
-            return !oldCoordinates.Equals(inhabitant.Place);
+            var buffer = new byte[8192];
+            socket.Send(Encoding.UTF8.GetBytes(GetCommandString(command)));
+            var data = Encoding.UTF8.GetString(buffer.Take(socket.Receive(buffer)).ToArray());
+            if (data.Split('\n')[0].Equals("True"))
+                return true;
+            if (data.Split('\n')[0].Equals("False"))
+                return false;
+            return false;
         }
 
-        private bool OutOfBorders(Coordinates position)
+        private string GetCommandString(Coordinates command)
         {
-            if (position == null)
-                return true;
-            return position.X < 0 || position.Y >= mapHeight || position.Y < 0 || position.X >= mapWidth;
+            if (command.Equals(MoveCommand.Up))
+                return "command up";
+            if (command.Equals(MoveCommand.Down))
+                return "command down";
+            if (command.Equals(MoveCommand.Right))
+                return "command right";
+            if (command.Equals(MoveCommand.Left))
+                return "command left";
         }
+
+        //private bool OutOfBorders(Coordinates position)
+        //{
+        //    if (position == null)
+        //        return true;
+        //    return position.X < 0 || position.Y >= mapHeight || position.Y < 0 || position.X >= mapWidth;
+        //}
     }
 }
